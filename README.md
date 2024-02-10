@@ -18,7 +18,7 @@ pip install hashlib
 ```
 
 Also you will need a VirusTotal API key. For getting one do the following:
-- Go to (VirusTotal) [www.virustotal.com]
+- Go to [VirusTotal](https://www.virustotal.com/)
 - Create an account / Log in
 - Click on your name on the upper, right side of the window
 - Click on 'API key'
@@ -34,9 +34,9 @@ python MalKnife.py
 
 ## To-Do's
 
-- [] Integration with other hash checkers like IBM X-Force, Talos (this will require API keys for each of them too)
-- [] Add main option to check if IP is from VPN vendor with Spur.us
-- [] Integration of Whois
-- [] Give option to check if there are any Any.run sandbox machines for that file
-- [] Check reputation of website with URLScan.io
-- [] More
+- [ ] Integration with other hash checkers like IBM X-Force, Talos (this will require API keys for each of them too)
+- [ ] Add main option to check if IP is from VPN vendor with Spur.us
+- [ ] Integration of Whois
+- [ ] Give option to check if there are any Any.run sandbox machines for that file
+- [ ] Check reputation of website with URLScan.io
+- [ ] More
