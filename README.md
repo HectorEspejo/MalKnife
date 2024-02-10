@@ -27,7 +27,12 @@ Also you will need a VirusTotal API key. For getting one do the following:
 
 ## How Do I Make It Work
 
-Just do the usual running method with python
+First, clone this repository on your computer
+```
+git clone https://github.com/HectorEspejo/MalKnife.git
+```
+
+Then just do the usual running method with Python scripts
 ```
 python MalKnife.py
 ```
