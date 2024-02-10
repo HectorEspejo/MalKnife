@@ -1,8 +1,9 @@
 import hashlib
 import requests
 import os
+import json
 
-#Calculates the MD5 hash of a given file
+# Calculates the MD5 hash of a given file
 def calculate_md5_hash(filepath):
     hash_md5 = hashlib.md5()
     with open(filepath, "rb") as f:
@@ -10,7 +11,7 @@ def calculate_md5_hash(filepath):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-#Virus Total API key handler 
+# VirusTotal API key handler 
 def check_virustotal(api_key, resource, resource_type='file'):
     urls = {
         'file': 'https://www.virustotal.com/vtapi/v2/file/report',
@@ -27,40 +28,63 @@ def check_virustotal(api_key, resource, resource_type='file'):
             if resource_type in ['file', 'hash']:
                 positives = result.get('positives', 0)
                 total = result.get('total', 0)
-                print(f"Detection ratio: {positives}/{total}")
-                input()
+                print(f"VirusTotal Detection ratio: {positives}/{total}")
             elif resource_type == 'ip':
-                print(f"IP report: {result}")
-                input()
+                print(f"VirusTotal IP report: {result}")
         else:
             print("No information available for this resource.")
-            input()
     else:
         print("Error querying VirusTotal API")
-        input()
 
-# Gets the API key from user or from file 'vt_api_key.txt' which contains it
-# If the user has not used the script before it will create a file with the key after it is entered
-def get_api_key():
-    api_key_file = 'vt_api_key.txt'
-    if os.path.exists(api_key_file):
-        with open(api_key_file, 'r') as file:
+# AbuseIPDB check function
+def check_ip_abuseipdb(api_key, ip_address):
+    url = 'https://api.abuseipdb.com/api/v2/check'
+    querystring = {
+        'ipAddress': ip_address,
+        'maxAgeInDays': '90'
+    }
+    headers = {
+        'Accept': 'application/json',
+        'Key': api_key
+    }
+    response = requests.request(method='GET', url=url, headers=headers, params=querystring)
+    decoded_response = json.loads(response.text)
+    print("AbuseIPDB Response:")
+    print(json.dumps(decoded_response, sort_keys=True, indent=4))
+
+# Gets the API key from user or from file which contains it
+def get_api_key(filename, prompt):
+    if os.path.exists(filename):
+        with open(filename, 'r') as file:
             api_key = file.read().strip()
     else:
-        api_key = input("Please enter your VirusTotal API key: ")
-        with open(api_key_file, 'w') as file:
+        api_key = input(prompt)
+        with open(filename, 'w') as file:
             file.write(api_key)
     return api_key
 
 # Option for allowing user to change its API key
 def change_api_key():
-    new_api_key = input("Enter the new VirusTotal API key: ")
-    with open('vt_api_key.txt', 'w') as file:
-        file.write(new_api_key)
-    print("API key updated successfully.")
+    print("\nWhich API key would you like to change?")
+    print("1. VirusTotal API key")
+    print("2. AbuseIPDB API key")
+    choice = input("Enter your choice (1/2): ")
+    if choice == '1':
+        new_api_key = input("Enter the new VirusTotal API key: ")
+        with open('vt_api_key.txt', 'w') as file:
+            file.write(new_api_key)
+        print("VirusTotal API key updated successfully.")
+    elif choice == '2':
+        new_api_key = input("Enter the new AbuseIPDB API key: ")
+        with open('abuseipdb_api_key.txt', 'w') as file:
+            file.write(new_api_key)
+        print("AbuseIPDB API key updated successfully.")
 
+# Main menu function
 def main_menu():
-    api_key = get_api_key()
+    vt_api_key = get_api_key('vt_api_key.txt', "Please enter your VirusTotal API key: ")
+    abuseipdb_api_key = get_api_key('abuseipdb_api_key.txt', "Please enter your AbuseIPDB API key: ")
+
     while True:
         print("\nOptions:")
         print("1. Check file")
@@ -74,16 +98,25 @@ def main_menu():
             file_path = input("Enter the absolute path of the file: ")
             md5_hash = calculate_md5_hash(file_path)
             print(f"MD5 Hash: {md5_hash}")
-            check_virustotal(api_key, md5_hash, 'file')
+            check_virustotal(vt_api_key, md5_hash, 'file')
+            input("Press enter to return to menu...")
         elif choice == '2':
-            ip_address = input("Enter the IP address: ")
-            check_virustotal(api_key, ip_address, 'ip')
+            ip_address = input("Enter the IP address to check: ")
+            print("Checking on VirusTotal...")
+            check_virustotal(vt_api_key, ip_address, 'ip')
+            input("Press enter to see AbuseIPDB results...")
+            print("Checking on AbuseIPDB...")
+            check_ip_abuseipdb(abuseipdb_api_key, ip_address)
+            input("Press enter to return to menu...")
         elif choice == '3':
             hash_input = input("Enter the hash: ")
-            check_virustotal(api_key, hash_input, 'hash')
+            check_virustotal(vt_api_key, hash_input, 'hash')
+            input("Press enter to return to menu...")
         elif choice == '4':
             change_api_key()
-            api_key = get_api_key()  # Refresh the API key in case it was changed
+            # Re-fetch API keys in case they were changed
+            vt_api_key = get_api_key('vt_api_key.txt', "Please enter your VirusTotal API key: ")
+            abuseipdb_api_key = get_api_key('abuseipdb_api_key.txt', "Please enter your AbuseIPDB API key: ")
         elif choice.lower() == 'q':
             print("Exiting.")
             break
@@ -93,4 +126,4 @@ def main_menu():
 if __name__ == "__main__":
     main_menu()
 
-#Made with love by Hector <3 Happy blue teaming!
+# Made with love in 2024 by Hector <3 Happy blue teaming!
