@@ -32,6 +32,7 @@ Do the following:
 - Log into your account. If you don't have one create one and confirm your email
 - On your account dashboard you will see a row of buttons. Select 'API'
 <img width="1138" alt="image" src="https://github.com/HectorEspejo/MalKnife/assets/5872877/d3220317-4e19-4448-9da9-dcf4dfea6620">
+
 - When prompted, select 'Create key'
 - Copy it and paste it when the script asks you for one
 
