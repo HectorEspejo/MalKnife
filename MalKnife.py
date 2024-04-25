@@ -2,6 +2,7 @@ import hashlib
 import requests
 import os
 import json
+import whois
 
 # Calculates the MD5 hash of a given file
 def calculate_md5_hash(filepath):
@@ -80,6 +81,14 @@ def change_api_key():
             file.write(new_api_key)
         print("AbuseIPDB API key updated successfully.")
 
+def perform_whois(domain):
+    try:
+        w = whois.whois(domain)
+        print("\nWhois Information:")
+        print(json.dumps(w, default=str, indent=4))
+    except Exception as e:
+        print("Failed to retrieve Whois information:", str(e))
+
 # Main menu function
 def main_menu():
     vt_api_key = get_api_key('vt_api_key.txt', "Please enter your VirusTotal API key: ")
@@ -91,8 +100,9 @@ def main_menu():
         print("2. Check IP")
         print("3. Check hash")
         print("4. Change API key")
+        print("5. Whois lookup")
         print("q. Exit")
-        choice = input("Enter your choice (1/2/3/4/q): ")
+        choice = input("Enter your choice (1/2/3/4/5/q): ")
 
         if choice == '1':
             file_path = input("Enter the absolute path of the file: ")
@@ -117,6 +127,10 @@ def main_menu():
             # Re-fetch API keys in case they were changed
             vt_api_key = get_api_key('vt_api_key.txt', "Please enter your VirusTotal API key: ")
             abuseipdb_api_key = get_api_key('abuseipdb_api_key.txt', "Please enter your AbuseIPDB API key: ")
+        elif choice == '5':
+            domain = input("Enter the domain for Whois lookup: ")
+            perform_whois(domain)
+            input("Press enter to return to menu...")
         elif choice.lower() == 'q':
             print("Exiting.")
             break
