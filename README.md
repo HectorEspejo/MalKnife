@@ -52,7 +52,7 @@ python MalKnife.py
 
 - [ ] Integration with other hash checkers like IBM X-Force, Talos (this will require API keys for each of them too)
 - [ ] Add main option to check if IP is from VPN vendor with Spur.us
-- [ ] Integration of Whois
+- [x] Integration of Whois
 - [ ] Give option to check if there are any Any.run sandbox machines for that file
 - [x] Check reputation of website with AbuseIPDB
   - [ ] Ability to send reports 
