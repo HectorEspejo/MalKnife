@@ -5,7 +5,9 @@ A Swiss knife for blue teamers -  I really got tired of having to check everythi
 MalKnife is a Python script perfect for any blue teamers - analyst in SOC, on threat intelligence, on malware analysis. It provides the following options:
 - Check a file using an absolute path
 - Check an IP
-- Check an MD5 hash
+- Check a hash
+- Decode from Base64
+- Whois search
 <img width="387" alt="image" src="https://github.com/HectorEspejo/MalKnife/assets/5872877/4052eab6-9cd9-4783-b56a-17b09b53de37">
 
 ## Requirements
@@ -16,6 +18,9 @@ pip install requests
 ```
 ```
 pip install hashlib
+```
+```
+pip install whois
 ```
 ### Getting a VirusTotal API Key
 You will need a VirusTotal API key. For getting one do the following:
@@ -50,9 +55,10 @@ python MalKnife.py
 
 ## To-Do's
 
-- [ ] Integration with other hash checkers like IBM X-Force, Talos (this will require API keys for each of them too)
+- [ ] Integration with other OSINTs like IBM X-Force, Talos (this will require API keys for each of them too)
 - [ ] Add main option to check if IP is from VPN vendor with Spur.us
 - [x] Integration of Whois
+- [x] Base64 decoding
 - [ ] Give option to check if there are any Any.run sandbox machines for that file
 - [x] Check reputation of website with AbuseIPDB
   - [ ] Ability to send reports 
