@@ -3,6 +3,7 @@ import requests
 import os
 import json
 import whois
+import base64
 
 # Calculates the MD5 hash of a given file
 def calculate_md5_hash(filepath):
@@ -81,6 +82,7 @@ def change_api_key():
             file.write(new_api_key)
         print("AbuseIPDB API key updated successfully.")
 
+#Whois function
 def perform_whois(domain):
     try:
         w = whois.whois(domain)
@@ -88,6 +90,15 @@ def perform_whois(domain):
         print(json.dumps(w, default=str, indent=4))
     except Exception as e:
         print("Failed to retrieve Whois information:", str(e))
+
+#Base64 Decoder function
+def decode_base64(data):
+    try:
+        # Decode the Base64 data
+        base64_bytes = base64.b64decode(data)
+        return base64_bytes.decode('utf-8')
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
 
 # Main menu function
 def main_menu():
@@ -101,8 +112,9 @@ def main_menu():
         print("3. Check hash")
         print("4. Change API key")
         print("5. Whois lookup")
+        print("6. Decode Base64")
         print("q. Exit")
-        choice = input("Enter your choice (1/2/3/4/5/q): ")
+        choice = input("Enter your choice (1/2/3/4/5/6/q): ")
 
         if choice == '1':
             file_path = input("Enter the absolute path of the file: ")
@@ -121,6 +133,7 @@ def main_menu():
         elif choice == '3':
             hash_input = input("Enter the hash: ")
             check_virustotal(vt_api_key, hash_input, 'hash')
+            print(f"Check it on https://virustotal.com/gui/file/{hash_input}")
             input("Press enter to return to menu...")
         elif choice == '4':
             change_api_key()
@@ -130,6 +143,11 @@ def main_menu():
         elif choice == '5':
             domain = input("Enter the domain for Whois lookup: ")
             perform_whois(domain)
+            input("Press enter to return to menu...")
+        elif choice == '6':
+            base64_data = input("Enter the Base64 encoded payload: ")
+            decoded_output = decode_base64(base64_data)
+            print("Decoded output:", decoded_output)
             input("Press enter to return to menu...")
         elif choice.lower() == 'q':
             print("Exiting.")
